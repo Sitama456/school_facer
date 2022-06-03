@@ -110,3 +110,64 @@ set<Edge*> primMst(Graph* graph) {
     return result;
     
 }
+
+/**
+ * @brief Dijkstra 算法 指定从某个点出发，到其他点的最短到达距离 适用于没有累加和为负数的环
+ * 
+ */
+bool hasEntry(set<Node*>& s, Node* entry) {
+    return s.find(entry) != s.end();
+}
+
+Node* getMinDistanceAndUnselectedNode(map<Node*, int>& distanceMap, set<Node*>& selectedNodes);
+map<Node*, int> dijkstra1(Node* head) {
+    // 从head出发到所有点的最小距离
+    // key : 从 head出发到达key
+    // value : 从 head 出发到达 key 的最短距离
+    // 如果在表中，没有 T 的记录，含义是从 head 出发到T这个点的距离为正无穷。
+    map<Node*, int> distanceMap;
+    distanceMap[head] = 0;
+    // 已经求过距离的点 在 selectedNodes 中，再也不碰
+    set<Node*> selectedNodes;
+    // 一开始会把头节点选出来
+    Node* minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);
+    while (minNode != nullptr) {
+        int distance = distanceMap[minNode];
+        for (Edge* edge : minNode->edges) {
+            // minNode -> toNode 的距离等于原距离加上 edge->weight
+            Node* toNode = edge->to;
+            // 如果让原来没路的节点有路 就新增
+            if (!hasEntry(selectedNodes, toNode)) {
+                distanceMap.insert({toNode, distance + edge->weight});
+            } 
+            // 如果让原来的路更短 就更新
+            distanceMap.insert({toNode, min(distanceMap[toNode], distance + edge->weight)});
+        }
+        // 选出了 head->minNode 的最短距离 锁住
+        selectedNodes.insert(minNode);
+        minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);
+    }
+    return distanceMap;
+    
+}
+
+/**
+ * @brief 找出当前 distanceMap 中的最短距离 忽略已经 selected 的值
+ * 
+ * @param distanceMap 
+ * @param selectedNodes 
+ * @return Node* 
+ */
+Node* getMinDistanceAndUnselectedNode(map<Node*, int>& distanceMap, set<Node*>& selectedNodes) {
+    Node* minNode = nullptr;
+    int minDistance = INT32_MAX;
+    for (auto& entry : distanceMap) {
+        Node* node = entry.first;
+        int distance = entry.second;
+        if (selectedNodes.find(node) == selectedNodes.end() && distance < minDistance) {
+            minNode = node;
+            minDistance = distance;
+        }
+    }
+    return minNode;
+}
