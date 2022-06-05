@@ -171,3 +171,30 @@ Node* getMinDistanceAndUnselectedNode(map<Node*, int>& distanceMap, set<Node*>& 
     }
     return minNode;
 }
+
+
+/**
+ * @brief 优化dij算法
+ * 
+ */
+#include "3.1可调整结点值堆.h"
+
+map<Node*, int> dijkstra2(Node* head, int size) {
+    NodeHeap* nodeHeap = new NodeHeap(size);
+    // 加入头结点
+    nodeHeap->addOrUpdateOrIgnore(head, 0);
+    map<Node*, int> result;
+    while (!nodeHeap->isEmpty()) {
+        // 在堆中取出最小值 更新
+        NodeHeap::NodeRecord nodeRecord = nodeHeap->pop();
+        Node* cur = nodeRecord.node;
+        int distance = nodeRecord.distance;
+        for (Edge* edge : cur->edges) {
+            Node* toNode = edge->to;
+            // 这里只会更新更小值
+            nodeHeap->addOrUpdateOrIgnore(toNode, distance + edge->weight);
+        }
+        result.insert({cur, distance});
+    }
+    return result;
+}
