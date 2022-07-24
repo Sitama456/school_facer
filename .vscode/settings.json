@@ -21,6 +21,7 @@
         "streambuf": "cpp",
         "functional": "cpp",
         "tuple": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "list": "cpp"
     }
 }
