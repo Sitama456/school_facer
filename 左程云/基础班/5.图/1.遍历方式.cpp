@@ -75,6 +75,7 @@ void dfs(Node* node) {
         st.pop();
         for (Node* next : cur->nexts) {
             if (s.find(next) == s.end()) {
+                // 注意 这里是重新把cur压回去 
                 st.push(cur);
                 st.push(next);
                 s.insert(next);

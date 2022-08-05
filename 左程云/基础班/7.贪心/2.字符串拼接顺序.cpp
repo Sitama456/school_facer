@@ -46,6 +46,7 @@ int stringToInt(string str, int len) {
     int result = 0;
     for (int i = size - 1; i >= 0; --i) {
         result += (str[i] - 'a') * pow(26, count);
+        count++;
     }
     return result;
 }
