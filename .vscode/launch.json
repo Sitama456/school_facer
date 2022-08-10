@@ -8,7 +8,7 @@
             "name": "(gdb) 启动",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/华为机考真题/2.out",
+            "program": "${workspaceFolder}/科大讯飞机考真题/2.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
